@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { ProductsIndex } from "./ProductsIndex";
+import { ProductsNew } from "./ProductsNew";
 
 export function Content() {
   const [products, setProducts] = useState([]);
@@ -14,10 +15,19 @@ export function Content() {
     });
   };
 
+  const handleCreateProduct = (params, successCallback) => {
+    console.log("handleCreateProduct");
+    axios.post("https://mini-capstone-api-kul3.onrender.com/products.json").then((response) => {
+      setProducts([...products, response.data]);
+      successCallback();
+    });
+  };
+
   useEffect(handleIndexProducts, []);
 
   return (
     <div id="content">
+      <ProductsNew onCreateProduct={handleCreateProduct} />
       <ProductsIndex products={products} />
     </div>
   );
